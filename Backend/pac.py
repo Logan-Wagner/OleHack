@@ -4,6 +4,9 @@ class Player:
         self.hand = []      #list of cards in the players hand
         self.color = 0      # 0 if player is white, 1 if player is black 
 
+    def set_color(self, c):
+        self.color = c
+
 class Cards:
     def __init__(self, t, txt):
         self.title = t      #string for the card title
