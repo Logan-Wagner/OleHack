@@ -27,7 +27,13 @@ class State:
         #list of piece objects
         self.pieces = [self.p1, self.p2, self.p3,self.p4, self.p5, self.p6, self.p7, self.p8, self.p9, self.p10, self.p11, self.p12, self.p13, self.p14, self.p15, self.p16]
 
-        self.win_condition = 0  #current win condition
+        #current win condition
+        # 0 = square
+        # 1 = triangle
+        # 2 = 4 corners
+        # 3 = T-shape
+        # 4 = silly Z
+        self.win_condition = 0  
 
         self.c1 = pac.Card("Make a Square!", "Play this card to change the way to win! Now the only way to win is by making a 3x3 sqaure of pieces.")
         self.c2 = pac.Card("Make a Triange!", "Play this card to change the way to win! Now the only way to win is by making a triange of pieces.")
@@ -41,8 +47,8 @@ class State:
         self.draw_rule = 0      #current draw rule (draw one card) 
         #self.move_rule = 0      #current move rule (move to any surrounding square)
 
-    #checks if a move is legal and then calls the piece move function
-    def move(self, piece, next_x, next_y):
+    #checks if a move is legal, returns 0 if illegal and 1 if legal
+    def check_valid_move(self, piece, next_x, next_y):
         curr_x = piece.x_coord
         curr_y = piece.y_coord
 
@@ -59,34 +65,65 @@ class State:
             return 0
 
         elif (next_x == curr_x - 1) & (next_y == curr_y + 1):
-            piece.move(next_x, next_y)
+            return 1
         elif (next_x == curr_x) & (next_y == curr_y + 1):
-            piece.move(next_x, next_y)
+            return 1
         elif (next_x == curr_x + 1) & (next_y == curr_y + 1):
-            piece.move(next_x, next_y)
+            return 1
         elif (next_x == curr_x + 1) & (next_y == curr_y):
-            piece.move(next_x, next_y)
+            return 1
         elif (next_x == curr_x + 1) & (next_y == curr_y - 1):
-            piece.move(next_x, next_y)
+            return 1
         elif (next_x == curr_x) & (next_y == curr_y - 1):
-            piece.move(next_x, next_y)
+            return 1
         elif (next_x == curr_x - 1) & (next_y == curr_y - 1):
-            piece.move(next_x, next_y)
+            return 1
         elif (next_x == curr_x - 1) & (next_y == curr_y):
-            piece.move(next_x, next_y)
+            return 1
         else: 
-            print("Illegal move!")
+            return 0
 
         
-
-        
-
     #performs the action on the card!
     def play_card(self, card):
         return 0
 
+    #returns a certain piece given an index in the list
     def get_piece(self, indx):
         return self.pieces[indx]
+
+    #win condition check functions: 
+    def check_square(self, p):
+        return 0
+
+    def check_triangle(self, p):
+        return 0
+
+    def check_corners(self, p):
+        return 0
+    
+    def check_t(self, p):
+        return 0
+
+    def check_z(self, p):
+        return 0
+
+    #checks to see if a certain player has won 
+    def check_win_condition(self, player):
+        if self.win_condition == 1:
+            self.check_square()
+
+        elif self.win_condition == 2:
+            self.check_triangle()
+
+        elif self.win_condition == 3:
+            self.check_corners()
+
+        elif self.win_condition == 4:
+            self.check_t()
+
+        else:
+            self.check_z()
 
 
 
