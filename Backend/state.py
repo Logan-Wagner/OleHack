@@ -111,19 +111,19 @@ class State:
     #checks to see if a certain player has won 
     def check_win_condition(self, player):
         if self.win_condition == 1:
-            self.check_square()
+            self.check_square(player)
 
         elif self.win_condition == 2:
-            self.check_triangle()
+            self.check_triangle(player)
 
         elif self.win_condition == 3:
-            self.check_corners()
+            self.check_corners(player)
 
         elif self.win_condition == 4:
-            self.check_t()
+            self.check_t(player)
 
         else:
-            self.check_z()
+            self.check_z(player)
 
 
 
