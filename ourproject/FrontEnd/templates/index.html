@@ -4,8 +4,6 @@
       <title>
         Shape Making Game
       </title>
-      {% load static %}
-      <link rel="stylesheet" href="{% static 'styles.css' %}">
       <style>
       :root {
         --main-bg: grey;
@@ -19,7 +17,6 @@
         margin: 0;
         background-color: var(--main-bg);
       }
-
       .container {
         height: 100vh;
         width: 100vw;
@@ -44,7 +41,6 @@
         grid-row-start: header;
         grid-row-end: board;
       }
-
       .profile {
         display: flex;
         justify-content: center;
@@ -57,21 +53,22 @@
         width: auto;
         height: 100%;
       }
-
       .board {
         display: grid;
-        grid-template-columns: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5%;
-        grid-template-rows: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5%;
-        background-color: blue;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
         grid-column-start: center-bar;
         grid-column-end: right-bar;
         grid-row-start: board;
         grid-row-end: hand;
       }
       .cell {
-        borderL 1px solid black;
+        background-color: red;
+        border: 1px solid black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
-
       .hand {
         display: flex;
         justify-content: center;
@@ -93,9 +90,36 @@
         position: relative;
         top: -50px;;
       }
+      .white {
+        background-color: white;
+      }
+      .black {
+        background-color: black;
+      }
+      .piece {
+        width: 50%;
+        height: 50%;
+        border: 1px solid black;
+        border-radius: 100%;
+      }
 </style>
+<script>
+white_pieces = [];
+black_pieces = [];
+  {% for p in pieces %}
+      identifier = {{p.get_x_coord}} + ":" + {{p.get_y_coord}};
+      if ({{p.get_color}} == 1) {
+        black_pieces.push(identifier);
+      } else {
+        white_pieces.push(identifier);
+      }
+  {% endfor %}
+</script>
   </head>
   <body>
+    <form action = "{% url 'newGame' %}" method="get">
+      <input type="submit" value="new Game" />
+    </form>
     <div class="container">
       <div class="title-text">
         <h2 id="title">Dope Ass Game</h2>
@@ -104,7 +128,7 @@
         <img src="https://i.stack.imgur.com/34AD2.jpg"/>
       </div>
       <div class="board">
-      <div class="cell"></div>
+<div class="cell" id="0:7"></div><div class="cell" id="1:7"></div><div class="cell" id="2:7"></div><div class="cell" id="3:7"></div><div class="cell" id="4:7"></div><div class="cell" id="5:7"></div><div class="cell" id="6:7"></div><div class="cell" id="7:7"></div><div class="cell" id="0:6"></div><div class="cell" id="1:6"></div><div class="cell" id="2:6"></div><div class="cell" id="3:6"></div><div class="cell" id="4:6"></div><div class="cell" id="5:6"></div><div class="cell" id="6:6"></div><div class="cell" id="7:6"></div><div class="cell" id="0:5"></div><div class="cell" id="1:5"></div><div class="cell" id="2:5"></div><div class="cell" id="3:5"></div><div class="cell" id="4:5"></div><div class="cell" id="5:5"></div><div class="cell" id="6:5"></div><div class="cell" id="7:5"></div><div class="cell" id="0:4"></div><div class="cell" id="1:4"></div><div class="cell" id="2:4"></div><div class="cell" id="3:4"></div><div class="cell" id="4:4"></div><div class="cell" id="5:4"></div><div class="cell" id="6:4"></div><div class="cell" id="7:4"></div><div class="cell" id="0:3"></div><div class="cell" id="1:3"></div><div class="cell" id="2:3"></div><div class="cell" id="3:3"></div><div class="cell" id="4:3"></div><div class="cell" id="5:3"></div><div class="cell" id="6:3"></div><div class="cell" id="7:3"></div><div class="cell" id="0:2"></div><div class="cell" id="1:2"></div><div class="cell" id="2:2"></div><div class="cell" id="3:2"></div><div class="cell" id="4:2"></div><div class="cell" id="5:2"></div><div class="cell" id="6:2"></div><div class="cell" id="7:2"></div><div class="cell" id="0:1"></div><div class="cell" id="1:1"></div><div class="cell" id="2:1"></div><div class="cell" id="3:1"></div><div class="cell" id="4:1"></div><div class="cell" id="5:1"></div><div class="cell" id="6:1"></div><div class="cell" id="7:1"></div><div class="cell" id="0:0"></div><div class="cell" id="1:0"></div><div class="cell" id="2:0"></div><div class="cell" id="3:0"></div><div class="cell" id="4:0"></div><div class="cell" id="5:0"></div><div class="cell" id="6:0"></div><div class="cell" id="7:0"></div>
     </div>
       <div class="hand">
         <div class="card">
@@ -121,5 +145,17 @@
         </div>
       </div>
     </div>
+    <script>
+    window.onload = loadPieces();
+    function loadPieces() {
+      console.log(white_pieces);
+      for (piece of white_pieces) {
+        document.getElementById(piece).innerHTML = "<div class='white piece'></div>";
+      }
+      for (piece of black_pieces) {
+        document.getElementById(piece).innerHTML = "<div class='black piece'></div>";
+    }
+    }
+    </script>
   </body>
 <html>
