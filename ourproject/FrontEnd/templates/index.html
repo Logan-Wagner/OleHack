@@ -21,8 +21,8 @@
         height: 100vh;
         width: 100vw;
         display: grid;
-        grid-template-columns: [left-bar]15% [center-bar]70% [right-bar]15% [end];
-        grid-template-rows: [header]5% [board]75% [hand]20% [bottom];
+        grid-template-columns: [left-bar]15vw [board-left]calc((70vw - 75vh)/2) [center-bar]75vh [board-right]calc((70vw - 75vh)/2) [right-bar]15vw [end];
+        grid-template-rows: [header]5vh [board]75vh [hand]20vh [bottom];
       }
       #title {
         margin: 0px;
@@ -36,7 +36,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        grid-column-start: center-bar;
+        grid-column-start: board-left;
         grid-column-end: right-bar;
         grid-row-start: header;
         grid-row-end: board;
@@ -54,17 +54,17 @@
         height: 100%;
       }
       .board {
+        border: 3px solid black;
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         grid-template-rows: repeat(8, 1fr);
         grid-column-start: center-bar;
-        grid-column-end: right-bar;
+        grid-column-end: board-right;
         grid-row-start: board;
         grid-row-end: hand;
       }
       .cell {
-        background-color: red;
-        border: 1px solid black;
+        border: 0.5px solid black;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -102,6 +102,14 @@
         border: 1px solid black;
         border-radius: 100%;
       }
+
+      .brown {
+        background-color: #935335;
+      }
+
+      .beige {
+        background-color: #dfbc96;
+      }
 </style>
 <script>
 white_pieces = [];
@@ -117,18 +125,20 @@ black_pieces = [];
 </script>
   </head>
   <body>
-    <form action = "{% url 'newGame' %}" method="get">
-      <input type="submit" value="new Game" />
-    </form>
+    <!-- <div>{{games|length}}</div> -->
     <div class="container">
       <div class="title-text">
+        <form action = "{% url 'newGame' %}" method="get">
+          <input type="submit" value="new Game" />
+        </form>
         <h2 id="title">Dope Ass Game</h2>
       </div>
       <div class="profile">
         <img src="https://i.stack.imgur.com/34AD2.jpg"/>
       </div>
       <div class="board">
-<div class="cell" id="0:7"></div><div class="cell" id="1:7"></div><div class="cell" id="2:7"></div><div class="cell" id="3:7"></div><div class="cell" id="4:7"></div><div class="cell" id="5:7"></div><div class="cell" id="6:7"></div><div class="cell" id="7:7"></div><div class="cell" id="0:6"></div><div class="cell" id="1:6"></div><div class="cell" id="2:6"></div><div class="cell" id="3:6"></div><div class="cell" id="4:6"></div><div class="cell" id="5:6"></div><div class="cell" id="6:6"></div><div class="cell" id="7:6"></div><div class="cell" id="0:5"></div><div class="cell" id="1:5"></div><div class="cell" id="2:5"></div><div class="cell" id="3:5"></div><div class="cell" id="4:5"></div><div class="cell" id="5:5"></div><div class="cell" id="6:5"></div><div class="cell" id="7:5"></div><div class="cell" id="0:4"></div><div class="cell" id="1:4"></div><div class="cell" id="2:4"></div><div class="cell" id="3:4"></div><div class="cell" id="4:4"></div><div class="cell" id="5:4"></div><div class="cell" id="6:4"></div><div class="cell" id="7:4"></div><div class="cell" id="0:3"></div><div class="cell" id="1:3"></div><div class="cell" id="2:3"></div><div class="cell" id="3:3"></div><div class="cell" id="4:3"></div><div class="cell" id="5:3"></div><div class="cell" id="6:3"></div><div class="cell" id="7:3"></div><div class="cell" id="0:2"></div><div class="cell" id="1:2"></div><div class="cell" id="2:2"></div><div class="cell" id="3:2"></div><div class="cell" id="4:2"></div><div class="cell" id="5:2"></div><div class="cell" id="6:2"></div><div class="cell" id="7:2"></div><div class="cell" id="0:1"></div><div class="cell" id="1:1"></div><div class="cell" id="2:1"></div><div class="cell" id="3:1"></div><div class="cell" id="4:1"></div><div class="cell" id="5:1"></div><div class="cell" id="6:1"></div><div class="cell" id="7:1"></div><div class="cell" id="0:0"></div><div class="cell" id="1:0"></div><div class="cell" id="2:0"></div><div class="cell" id="3:0"></div><div class="cell" id="4:0"></div><div class="cell" id="5:0"></div><div class="cell" id="6:0"></div><div class="cell" id="7:0"></div>
+
+<div class="{% cycle 'brown' 'beige' as cellcolors %} cell" id="0:7"></div><div class="{%cycle cellcolors%} cell" id="1:7"></div><div class="{%cycle cellcolors%} cell" id="2:7"></div><div class="{%cycle cellcolors%} cell" id="3:7"></div><div class="{%cycle cellcolors%} cell" id="4:7"></div><div class="{%cycle cellcolors%} cell" id="5:7"></div><div class="{%cycle cellcolors%} cell" id="6:7"></div><div class="{%cycle cellcolors%} cell" id="7:7"></div><div class="{{ cellcolors }} cell" id="0:6"></div><div class="{%cycle cellcolors%} cell" id="1:6"></div><div class="{%cycle cellcolors%} cell" id="2:6"></div><div class="{%cycle cellcolors%} cell" id="3:6"></div><div class="{%cycle cellcolors%} cell" id="4:6"></div><div class="{%cycle cellcolors%} cell" id="5:6"></div><div class="{%cycle cellcolors%} cell" id="6:6"></div><div class="{%cycle cellcolors%} cell" id="7:6"></div><div class="{{ cellcolors }} cell" id="0:5"></div><div class="{%cycle cellcolors%} cell" id="1:5"></div><div class="{%cycle cellcolors%} cell" id="2:5"></div><div class="{%cycle cellcolors%} cell" id="3:5"></div><div class="{%cycle cellcolors%} cell" id="4:5"></div><div class="{%cycle cellcolors%} cell" id="5:5"></div><div class="{%cycle cellcolors%} cell" id="6:5"></div><div class="{%cycle cellcolors%} cell" id="7:5"></div><div class="{{ cellcolors }} cell" id="0:4"></div><div class="{%cycle cellcolors%} cell" id="1:4"></div><div class="{%cycle cellcolors%} cell" id="2:4"></div><div class="{%cycle cellcolors%} cell" id="3:4"></div><div class="{%cycle cellcolors%} cell" id="4:4"></div><div class="{%cycle cellcolors%} cell" id="5:4"></div><div class="{%cycle cellcolors%} cell" id="6:4"></div><div class="{%cycle cellcolors%} cell" id="7:4"></div><div class="{{ cellcolors }} cell" id="0:3"></div><div class="{%cycle cellcolors%} cell" id="1:3"></div><div class="{%cycle cellcolors%} cell" id="2:3"></div><div class="{%cycle cellcolors%} cell" id="3:3"></div><div class="{%cycle cellcolors%} cell" id="4:3"></div><div class="{%cycle cellcolors%} cell" id="5:3"></div><div class="{%cycle cellcolors%} cell" id="6:3"></div><div class="{%cycle cellcolors%} cell" id="7:3"></div><div class="{{ cellcolors }} cell" id="0:2"></div><div class="{%cycle cellcolors%} cell" id="1:2"></div><div class="{%cycle cellcolors%} cell" id="2:2"></div><div class="{%cycle cellcolors%} cell" id="3:2"></div><div class="{%cycle cellcolors%} cell" id="4:2"></div><div class="{%cycle cellcolors%} cell" id="5:2"></div><div class="{%cycle cellcolors%} cell" id="6:2"></div><div class="{%cycle cellcolors%} cell" id="7:2"></div><div class="{{ cellcolors }} cell" id="0:1"></div><div class="{%cycle cellcolors%} cell" id="1:1"></div><div class="{%cycle cellcolors%} cell" id="2:1"></div><div class="{%cycle cellcolors%} cell" id="3:1"></div><div class="{%cycle cellcolors%} cell" id="4:1"></div><div class="{%cycle cellcolors%} cell" id="5:1"></div><div class="{%cycle cellcolors%} cell" id="6:1"></div><div class="{%cycle cellcolors%} cell" id="7:1"></div><div class="{{ cellcolors }} cell" id="0:0"></div><div class="{%cycle cellcolors%} cell" id="1:0"></div><div class="{%cycle cellcolors%} cell" id="2:0"></div><div class="{%cycle cellcolors%} cell" id="3:0"></div><div class="{%cycle cellcolors%} cell" id="4:0"></div><div class="{%cycle cellcolors%} cell" id="5:0"></div><div class="{%cycle cellcolors%} cell" id="6:0"></div><div class="{%cycle cellcolors%} cell" id="7:0"></div>
     </div>
       <div class="hand">
         <div class="card">
