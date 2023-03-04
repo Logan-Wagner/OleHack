@@ -14,3 +14,6 @@ class Piece:
 
     def get_y_coord(self):
         return self.y_coord
+    
+    def get_color(self):
+        return self.color
