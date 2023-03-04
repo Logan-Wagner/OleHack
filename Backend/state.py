@@ -45,9 +45,20 @@ class State:
     def move(self, piece, next_x, next_y):
         curr_x = piece.x_coord
         curr_y = piece.y_coord
-        slope  = (next_y - curr_y)/(next_x - curr_x)
 
-        if (next_x == curr_x - 1) & (next_y == curr_y + 1):
+        check_x = 2*next_x - curr_x
+        check_y = 2*next_y - curr_y
+
+        empty = 1       #bool to see if the square after a piece is empty
+        for i in self.pieces:
+            if (i.get_x_coord() == check_x) & (i.get_y_coord() == check_y):
+                empty = 0
+
+        if empty == 0:
+            print("Illegal move!")
+            return 0
+
+        elif (next_x == curr_x - 1) & (next_y == curr_y + 1):
             piece.move(next_x, next_y)
         elif (next_x == curr_x) & (next_y == curr_y + 1):
             piece.move(next_x, next_y)
