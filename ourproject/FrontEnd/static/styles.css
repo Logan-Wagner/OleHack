@@ -1,0 +1,86 @@
+:root {
+  --main-bg: grey;
+}
+html {
+  height: 100vh;
+  width: 100vw;
+}
+body {
+  height: 100%;
+  margin: 0;
+  background-color: var(--main-bg);
+}
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: [left-bar]15% [center-bar]70% [right-bar]15% [end];
+  grid-template-rows: [header]5% [board]75% [hand]20% [bottom];
+}
+#title {
+  margin: 0px;
+  padding: auto 0px;
+}
+.card-title {
+  text-align: center;
+}
+.title-text {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column-start: center-bar;
+  grid-column-end: right-bar;
+  grid-row-start: header;
+  grid-row-end: board;
+}
+
+.profile {
+  display: flex;
+  justify-content: center;
+  grid-column-start: right-bar;
+  grid-column-end: end;
+  grid-row-start: header;
+  grid-row-end: board;
+}
+img {
+  width: auto;
+  height: 100%;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5%;
+  grid-template-rows: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5%;
+  background-color: blue;
+  grid-column-start: center-bar;
+  grid-column-end: right-bar;
+  grid-row-start: board;
+  grid-row-end: hand;
+}
+.cell {
+  borderL 1px solid black;
+}
+
+.hand {
+  display: flex;
+  justify-content: center;
+  grid-column-start: left-bar;
+  grid-column-end: end;
+  grid-row-start: hand;
+  grid-row-end: bottom;
+}
+.card {
+  border-radius: 10%;
+  border: 2px solid black;
+  width: 10%;
+  margin: 1%;
+  padding: 5px;
+  background-color: #E5E7E9;
+  transition: top 0.5s;
+}
+.card:hover {
+  position: relative;
+  top: -50px;;
+}
