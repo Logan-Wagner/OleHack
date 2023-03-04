@@ -42,8 +42,33 @@ class State:
         #self.move_rule = 0      #current move rule (move to any surrounding square)
 
     #checks if a move is legal and then calls the piece move function
-    def move(self, curr_x, curr_y, next_x, next_y):
-        return  0
+    def move(self, piece, next_x, next_y):
+        curr_x = piece.x_coord
+        curr_y = piece.y_coord
+        slope  = (next_y - curr_y)/(next_x - curr_x)
+
+        if (next_x == curr_x - 1) & (next_y == curr_y + 1):
+            piece.move(next_x, next_y)
+        elif (next_x == curr_x) & (next_y == curr_y + 1):
+            piece.move(next_x, next_y)
+        elif (next_x == curr_x + 1) & (next_y == curr_y + 1):
+            piece.move(next_x, next_y)
+        elif (next_x == curr_x + 1) & (next_y == curr_y):
+            piece.move(next_x, next_y)
+        elif (next_x == curr_x + 1) & (next_y == curr_y - 1):
+            piece.move(next_x, next_y)
+        elif (next_x == curr_x) & (next_y == curr_y - 1):
+            piece.move(next_x, next_y)
+        elif (next_x == curr_x - 1) & (next_y == curr_y - 1):
+            piece.move(next_x, next_y)
+        elif (next_x == curr_x - 1) & (next_y == curr_y):
+            piece.move(next_x, next_y)
+        else: 
+            print("Illegal move!")
+
+        
+
+        
 
     #performs the action on the card!
     def play_card(self, card):
