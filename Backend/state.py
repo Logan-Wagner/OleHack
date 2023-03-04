@@ -49,39 +49,52 @@ class State:
 
     #checks if a move is legal, returns 0 if illegal and 1 if legal
     def check_valid_move(self, piece, next_x, next_y):
+        valid = 0
         curr_x = piece.x_coord
         curr_y = piece.y_coord
 
         check_x = 2*next_x - curr_x
         check_y = 2*next_y - curr_y
 
-        empty = 1       #bool to see if the square after a piece is empty
+        if (next_x == curr_x - 1) & (next_y == curr_y + 1):
+            valid = 1
+        elif (next_x == curr_x) & (next_y == curr_y + 1):
+            valid = 1
+        elif (next_x == curr_x + 1) & (next_y == curr_y + 1):
+            valid = 1
+        elif (next_x == curr_x + 1) & (next_y == curr_y):
+            valid = 1
+        elif (next_x == curr_x + 1) & (next_y == curr_y - 1):
+            valid = 1
+        elif (next_x == curr_x) & (next_y == curr_y - 1):
+            valid = 1
+        elif (next_x == curr_x - 1) & (next_y == curr_y - 1):
+            valid = 1
+        elif (next_x == curr_x - 1) & (next_y == curr_y):
+            valid = 1
+        
+        empty = 1
+        emtpy_2 = 1
+        getting_yeeted = 0
         for i in self.pieces:
-            if (i.get_x_coord() == check_x) & (i.get_y_coord() == check_y):
+            if (i.get_x_coord() == next_x) & (i.get_y_coord() == next_y):
                 empty = 0
+                getting_yeeted = i
 
         if empty == 0:
-            print("Illegal move!")
-            return 0
+            empty_2 = 1       #bool to see if the square after a piece is empty
+            for i in self.pieces:
+                if (i.get_x_coord() == check_x) & (i.get_y_coord() == check_y):
+                    empty_2 = 0
 
-        elif (next_x == curr_x - 1) & (next_y == curr_y + 1):
-            return 1
-        elif (next_x == curr_x) & (next_y == curr_y + 1):
-            return 1
-        elif (next_x == curr_x + 1) & (next_y == curr_y + 1):
-            return 1
-        elif (next_x == curr_x + 1) & (next_y == curr_y):
-            return 1
-        elif (next_x == curr_x + 1) & (next_y == curr_y - 1):
-            return 1
-        elif (next_x == curr_x) & (next_y == curr_y - 1):
-            return 1
-        elif (next_x == curr_x - 1) & (next_y == curr_y - 1):
-            return 1
-        elif (next_x == curr_x - 1) & (next_y == curr_y):
-            return 1
-        else: 
-            return 0
+            if empty_2 == 0:
+                print("Illegal move!")
+                valid = 0
+
+        if (empty == 0) & (empty_2 == 1):
+            getting_yeeted.move(check_x, check_y)
+
+        return valid
 
         
     #performs the action on the card!
