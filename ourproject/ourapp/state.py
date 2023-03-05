@@ -48,47 +48,30 @@ class State:
             self.turn = 0
 
     #checks if a move is legal, returns 0 if illegal and 1 if legal
-    def check_valid_move(self, piece, next_x, next_y):
-        valid = 0
-        curr_x = piece.x_coord
-        curr_y = piece.y_coord
+    def check_valid_move(self, curr_x, curr_y, next_x, next_y):
+        valid = 1
 
         check_x = 2*next_x - curr_x
         check_y = 2*next_y - curr_y
-
-        if (next_x == curr_x - 1) & (next_y == curr_y + 1):
-            valid = 1
-        elif (next_x == curr_x) & (next_y == curr_y + 1):
-            valid = 1
-        elif (next_x == curr_x + 1) & (next_y == curr_y + 1):
-            valid = 1
-        elif (next_x == curr_x + 1) & (next_y == curr_y):
-            valid = 1
-        elif (next_x == curr_x + 1) & (next_y == curr_y - 1):
-            valid = 1
-        elif (next_x == curr_x) & (next_y == curr_y - 1):
-            valid = 1
-        elif (next_x == curr_x - 1) & (next_y == curr_y - 1):
-            valid = 1
-        elif (next_x == curr_x - 1) & (next_y == curr_y):
-            valid = 1
         
-        empty = 1
+        empty = 1       #bool to see if the space next to it
         emtpy_2 = 1
         getting_yeeted = 0
         for i in self.pieces:
             if (i.get_x_coord() == next_x) & (i.get_y_coord() == next_y):
                 empty = 0
                 getting_yeeted = i
+                break
 
         if empty == 0:
             empty_2 = 1       #bool to see if the square after a piece is empty
             for i in self.pieces:
                 if (i.get_x_coord() == check_x) & (i.get_y_coord() == check_y):
                     empty_2 = 0
+                    break
 
             if empty_2 == 0:
-                print("Illegal move!")
+                #print("Illegal move!")
                 valid = 0
 
         if (empty == 0) & (empty_2 == 1):
@@ -284,19 +267,19 @@ class State:
     #checks to see if a certain player has won 
     def check_win_condition(self, player):
         if self.win_condition == 1:
-            self.check_square(player)
+            return self.check_square(player)
 
         elif self.win_condition == 2:
-            self.check_triangle(player)
+            return self.check_triangle(player)
 
         elif self.win_condition == 3:
-            self.check_corners(player)
+            return self.check_corners(player)
 
         elif self.win_condition == 4:
-            self.check_t(player)
+            return self.check_t(player)
 
         else:
-            self.check_z(player)
+            return self.check_z(player)
 
 
 
