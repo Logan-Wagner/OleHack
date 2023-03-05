@@ -53,18 +53,30 @@ class State:
         else:
             self.turn = 0
 
+    def get_deck(self):
+        return self.card_deck
+
+    def set_win_con(self, w):
+        self.win_condition = w
+
+    def set_turn(self, t):
+        self.turn = t
+
+    def get_turn(self):
+        return self.turn
+
     #checks if a move is legal, returns 0 if illegal and 1 if legal
     def check_valid_move(self, curr_x, curr_y, next_x, next_y):
         valid = 1
-
         check_x = 2*next_x - curr_x
         check_y = 2*next_y - curr_y
+
 
         empty = 1       #bool to see if the space next to it
         empty_2 = 1
         getting_yeeted = 0
         for i in self.pieces:
-            if (i.get_x_coord() == next_x) & (i.get_y_coord() == next_y):
+            if (i.get_x_coord() == next_x) and (i.get_y_coord() == next_y):
                 empty = 0
                 getting_yeeted = i
                 break

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load static %}
+      <title>
+        Shape Making Game
+      </title>
+      <style>
+      :root {
+        --main-bg: grey;
+        --brown: rgb(147, 83, 53);
+        --beige: rgb(223, 188, 150);
+        --brown-selected: rgb(147, 250, 53);
+        --beige-selected: rgb(223, 250, 150);
+        --win-area-border: rgba(0, 128, 0, 0.5);
+      }
+      html {
+        height: 100vh;
+        width: 100vw;
+      }
+      body {
+        height: 100%;
+        margin: 0;
+        background-color: var(--main-bg);
+      }
+      .container {
+        height: 100vh;
+        width: 100vw;
+        display: grid;
+        grid-template-columns: [left-bar]15vw [board-left]calc((70vw - 75vh)/2) [center-bar]75vh [board-right]calc((70vw - 75vh)/2) [right-bar]15vw [end];
+        grid-template-rows: [header]5vh [board]75vh [hand]20vh [bottom];
+      }
+      #title {
+        margin: 0px;
+        padding: auto 0px;
+      }
+      .card-title {
+        text-align: center;
+      }
+      .title-text {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        grid-column-start: board-left;
+        grid-column-end: right-bar;
+        grid-row-start: header;
+        grid-row-end: board;
+      }
+      .profile {
+        display: flex;
+        justify-content: center;
+        grid-column-start: right-bar;
+        grid-column-end: end;
+        grid-row-start: header;
+        grid-row-end: board;
+      }
+      img {
+        width: auto;
+        height: 100%;
+      }
+      .board {
+        border: 3px solid black;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        grid-column-start: center-bar;
+        grid-column-end: board-right;
+        grid-row-start: board;
+        grid-row-end: hand;
+      }
+      .cell {
+        border: 0.5px solid black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .hand {
+        display: flex;
+        justify-content: center;
+        grid-column-start: left-bar;
+        grid-column-end: end;
+        grid-row-start: hand;
+        grid-row-end: bottom;
+      }
+      .card {
+        border-radius: 10%;
+        border: 2px solid black;
+        width: 10%;
+        margin: 1%;
+        padding: 5px;
+        background-color: #E5E7E9;
+        transition: top 0.5s;
+      }
+      .card:hover {
+        position: relative;
+        top: -50px;;
+      }
+      .white {
+        background-color: white;
+      }
+      .black {
+        background-color: black;
+      }
+      .piece {
+        width: 50%;
+        height: 50%;
+        border: 1px solid black;
+        border-radius: 100%;
+      }
+
+      .brown {
+        background-color: var(--brown);
+      }
+      .brown-selected {
+        background-color: var(--brown-selected);
+      }
+      .beige-selected {
+        background-color: var(--beige-selected);
+      }
+      .beige {
+        background-color: var(--beige);
+      }
+      #c1-5, #c2-5, #c3-5, #c4-5, #c5-5, #c6-5 {
+        border-top: 8px solid var(--win-area-border);
+      }
+      #c1-2, #c2-2, #c3-2, #c4-2, #c5-2, #c6-2 {
+        border-bottom: 8px solid var(--win-area-border);
+      }
+      #c1-2, #c1-3, #c1-4, #c1-5 {
+        border-left: 8px solid var(--win-area-border);
+      }
+      #c6-2, #c6-3, #c6-4, #c6-5 {
+        border-right: 8px solid var(--win-area-border);
+      }
+      .selected {
+        background-color: rgb(255, 0, 0);
+      }
+</style>
+<!-- <link rel="stylesheet" href="{% static 'styles.css' %}"> -->
+<script>
+var last_clicked_piece;
+var adjacent_tiles = [];
+var last_clicked_piece_x;
+var last_clicked_piece_y;
+function unselect() {
+  for (tile of adjacent_tiles) {
+    if (tile.classList[0] == "beige-selected") {
+      tile.setAttribute("class", "beige cell");
+    } else {
+      tile.setAttribute("class", "brown cell");
+    }
+  }
+  adjacent_tiles = [];
+  if (last_clicked_piece != null) {
+    last_clicked_piece.setAttribute("class", my_color + " piece");
+  }
+  last_clicked_piece = null;
+}
+function clickPiece(piece, x, y) {
+  unselect();
+  for (var i = -1; i < 2; i++) {
+    for (var j = -1; j < 2; j++) {
+      if ((!i && !j) || parseInt(x) + parseInt(i) > 7 || parseInt(x) + parseInt(i) < 0 || parseInt(y) + parseInt(j) > 7 || parseInt(y) + parseInt(j) < 0) {
+        continue;
+      }
+      var tile_id = create_tile_id(parseInt(x) + parseInt(i), parseInt(y) + parseInt(j));
+      adjacent_tiles.push(document.getElementById(tile_id));
+    }
+  }
+  if (adjacent_tiles != null) {
+    for (tile of adjacent_tiles) {
+      if (tile.classList[0] == "beige") {
+        tile.setAttribute("class", "beige-selected cell");
+      } else {
+        tile.setAttribute("class", "brown-selected cell");
+      }
+    }
+  }
+  piece.setAttribute("class", "selected piece");
+  last_clicked_piece = piece;
+}
+function clickCell(e) {
+  e.preventDefault();
+  if (e.target.classList[0] == "white") {
+    unselect();
+    last_clicked_piece = e.target;
+    last_clicked_piece_x = last_clicked_piece.parentElement.id.charAt(1);
+    last_clicked_piece_y = last_clicked_piece.parentElement.id.charAt(3);
+    clickPiece(e.target, last_clicked_piece_x, last_clicked_piece_y);
+  } else {
+    if (last_clicked_piece != null) {
+      var new_x = parseInt(e.target.id.charAt(1));
+      var new_y = parseInt(e.target.id.charAt(3));
+      if (Math.abs(new_x - last_clicked_piece_x) <= 1 && Math.abs(new_y - last_clicked_piece_y) <= 1) {
+        sendMove(last_clicked_piece_x, last_clicked_piece_y, new_x, new_y);
+      }  else {
+        unselect();
+      }
+    }
+  }
+}
+async function sendMove(oldx, oldy, newx, newy) {
+  var response = await fetch("{% url 'sendMove' %}/{{game_id}}/", {
+    method: "POST",
+    headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
+    credential: 'same-origin',
+    body: JSON.stringify({
+      'oldx': parseInt(oldx),
+      'oldy': parseInt(oldy),
+      'newx': newx,
+      'newy': newy,
+      'color': color,
+    })
+  })
+  .then(response => response.text())
+    .then(text => {
+      document.open()
+      document.write(text)
+      document.close()
+    });
+      // .then(r => document.close())
+    // .then(r => loadPieces())
+}
+</script>
+<script>
+var white_pieces = [];
+var black_pieces = [];
+var color = 0;
+var my_color = color ? "black" : "white";
+  {% for p in pieces %}
+      identifier = create_tile_id({{p.get_x_coord}},{{p.get_y_coord}});
+      if ({{p.get_color}} == 1) {
+        black_pieces.push(identifier);
+      } else {
+        white_pieces.push(identifier);
+      }
+  {% endfor %}
+
+function create_tile_id(x, y) {
+  return "c" + x + "-" + y;
+}
+</script>
+  </head>
+  <body>
+    {% csrf_token %}
+    <div class="container">
+      <div class="title-text">
+        <h2 id="title">Dope Ass Game</h2>
+      </div>
+      <div class="profile">
+        <img src="https://i.stack.imgur.com/34AD2.jpg"/>
+      </div>
+      <div class="board">
+
+<div class="{% cycle 'brown' 'beige' as cellcolors %} cell" id="c0-7"></div><div class="{%cycle cellcolors%} cell" id="c1-7"></div><div class="{%cycle cellcolors%} cell" id="c2-7"></div><div class="{%cycle cellcolors%} cell" id="c3-7"></div><div class="{%cycle cellcolors%} cell" id="c4-7"></div><div class="{%cycle cellcolors%} cell" id="c5-7"></div><div class="{%cycle cellcolors%} cell" id="c6-7"></div><div class="{%cycle cellcolors%} cell" id="c7-7"></div><div class="{{ cellcolors }} cell" id="c0-6"></div><div class="{%cycle cellcolors%} cell" id="c1-6"></div><div class="{%cycle cellcolors%} cell" id="c2-6"></div><div class="{%cycle cellcolors%} cell" id="c3-6"></div><div class="{%cycle cellcolors%} cell" id="c4-6"></div><div class="{%cycle cellcolors%} cell" id="c5-6"></div><div class="{%cycle cellcolors%} cell" id="c6-6"></div><div class="{%cycle cellcolors%} cell" id="c7-6"></div><div class="{{ cellcolors }} cell" id="c0-5"></div><div class="{%cycle cellcolors%} cell" id="c1-5"></div><div class="{%cycle cellcolors%} cell" id="c2-5"></div><div class="{%cycle cellcolors%} cell" id="c3-5"></div><div class="{%cycle cellcolors%} cell" id="c4-5"></div><div class="{%cycle cellcolors%} cell" id="c5-5"></div><div class="{%cycle cellcolors%} cell" id="c6-5"></div><div class="{%cycle cellcolors%} cell" id="c7-5"></div><div class="{{ cellcolors }} cell" id="c0-4"></div><div class="{%cycle cellcolors%} cell" id="c1-4"></div><div class="{%cycle cellcolors%} cell" id="c2-4"></div><div class="{%cycle cellcolors%} cell" id="c3-4"></div><div class="{%cycle cellcolors%} cell" id="c4-4"></div><div class="{%cycle cellcolors%} cell" id="c5-4"></div><div class="{%cycle cellcolors%} cell" id="c6-4"></div><div class="{%cycle cellcolors%} cell" id="c7-4"></div><div class="{{ cellcolors }} cell" id="c0-3"></div><div class="{%cycle cellcolors%} cell" id="c1-3"></div><div class="{%cycle cellcolors%} cell" id="c2-3"></div><div class="{%cycle cellcolors%} cell" id="c3-3"></div><div class="{%cycle cellcolors%} cell" id="c4-3"></div><div class="{%cycle cellcolors%} cell" id="c5-3"></div><div class="{%cycle cellcolors%} cell" id="c6-3"></div><div class="{%cycle cellcolors%} cell" id="c7-3"></div><div class="{{ cellcolors }} cell" id="c0-2"></div><div class="{%cycle cellcolors%} cell" id="c1-2"></div><div class="{%cycle cellcolors%} cell" id="c2-2"></div><div class="{%cycle cellcolors%} cell" id="c3-2"></div><div class="{%cycle cellcolors%} cell" id="c4-2"></div><div class="{%cycle cellcolors%} cell" id="c5-2"></div><div class="{%cycle cellcolors%} cell" id="c6-2"></div><div class="{%cycle cellcolors%} cell" id="c7-2"></div><div class="{{ cellcolors }} cell" id="c0-1"></div><div class="{%cycle cellcolors%} cell" id="c1-1"></div><div class="{%cycle cellcolors%} cell" id="c2-1"></div><div class="{%cycle cellcolors%} cell" id="c3-1"></div><div class="{%cycle cellcolors%} cell" id="c4-1"></div><div class="{%cycle cellcolors%} cell" id="c5-1"></div><div class="{%cycle cellcolors%} cell" id="c6-1"></div><div class="{%cycle cellcolors%} cell" id="c7-1"></div><div class="{{ cellcolors }} cell" id="c0-0"></div><div class="{%cycle cellcolors%} cell" id="c1-0"></div><div class="{%cycle cellcolors%} cell" id="c2-0"></div><div class="{%cycle cellcolors%} cell" id="c3-0"></div><div class="{%cycle cellcolors%} cell" id="c4-0"></div><div class="{%cycle cellcolors%} cell" id="c5-0"></div><div class="{%cycle cellcolors%} cell" id="c6-0"></div><div class="{%cycle cellcolors%} cell" id="c7-0"></div>
+    </div>
+      <div class="hand">
+        {% for h in hand %}
+        <div class="card">
+          <p class="card-title">{{ h.title }}</p>
+          <p class="card-text">{{ h.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <script>
+    window.onload = loadPieces();
+    function loadPieces() {
+      for (piece of white_pieces) {
+        elem = document.getElementById(piece);
+        elem.innerHTML = "<div class='white piece'></div>";
+      }
+      for (piece of black_pieces) {
+        elem = document.getElementById(piece);
+        elem.innerHTML = "<div class='black piece'></div>";
+      }
+      for (elem of document.getElementsByClassName("cell")) {
+        elem.onclick = clickCell;
+      }
+    }
+    </script>
+  </body>
+<html>

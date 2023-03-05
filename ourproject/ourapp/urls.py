@@ -4,8 +4,11 @@ from . import views
 
 urlpatterns = [
     path('', views.landing_page, name='landing_page'),
-    path('newGame', views.newGame, name='newGame' ),
-    path('sendMove', views.sendMove,name='sendMove')
+    path('newGame', views.newGame, name='newGame'),
+    path('game', views.game, name='gameindex'),
+    path('game/<int:game_id>/', views.game, name='game'),
+    path('sendMove', views.sendMove,name='sendMove'),
+    path('sendMove/<int:g_id>/', views.sendMove,name='sendMove'),
     path('sign_in', views.sign_in, name = 'sign_in'),
     path('log_in', views.log_in, name = 'log_in'),
     path('new_user', views.new_user, name = 'new_user'),

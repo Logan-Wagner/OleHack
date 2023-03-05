@@ -7,11 +7,17 @@ class Player:
     def set_color(self, c):
         self.color = c
 
-    def get_hand(self, hand):
+    def get_hand(self):
         return self.hand
 
     def get_color(self):
         return self.color
+
+    def get_id(self):
+        return self.id
+
+    def set_hand(self, h):
+        self.hand = h
 
 class Cards:
     def __init__(self, t, txt, id):
