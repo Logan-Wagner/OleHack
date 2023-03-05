@@ -182,7 +182,7 @@ function clickPiece(piece, x, y) {
 }
 function clickCell(e) {
   e.preventDefault();
-  if (e.target.classList[0] == "white") {
+  if (e.target.classList[0] == my_color) {
     unselect();
     last_clicked_piece = e.target;
     last_clicked_piece_x = last_clicked_piece.parentElement.id.charAt(1);
@@ -226,7 +226,7 @@ async function sendMove(oldx, oldy, newx, newy) {
 <script>
 var white_pieces = [];
 var black_pieces = [];
-var color = 0;
+var color = {{turn}};
 var my_color = color ? "black" : "white";
   {% for p in pieces %}
       identifier = create_tile_id({{p.get_x_coord}},{{p.get_y_coord}});

@@ -72,12 +72,11 @@ def game(request, game_id):
     currentGame.get_player(1).set_hand(DatabaseFunctions.strToDeck(currentDBGame.P1Hand))
     currentGame.state.set_win_con(currentDBGame.CurrentWinCondition)
     currentGame.state.set_turn(currentDBGame.Move)
-    print("Load white positions:")
-    print(currentDBGame.WhitePieces)
     context = {
         'pieces': currentGame.state.get_pieces(),
         'hand': currentGame.get_player(1).get_hand(),
-        'game_id': game_id
+        'game_id': game_id,
+        'turn': currentDBGame.Move
     }
     return render(request, 'game.html', context)
 
@@ -175,6 +174,7 @@ def sendMove(request, g_id):
     context = {
         'pieces': currentGame.state.get_pieces(),
         'hand': currentGame.get_player(1).get_hand(),
-        'game_id': g_id
+        'game_id': g_id,
+        'turn': currentGame.state.get_turn()
         }
     return render(request, "game.html", context)
