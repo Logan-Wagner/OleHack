@@ -1,5 +1,5 @@
-import piece
-import pac
+from . import piece
+from . import pac
 import random
 
 class State:

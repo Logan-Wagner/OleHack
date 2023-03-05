@@ -1,5 +1,5 @@
-import state
-import pac
+from . import state
+from . import pac
 
 class Game:
     def __init__(self, player1, player2, deck):
