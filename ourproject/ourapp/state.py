@@ -1,9 +1,9 @@
-import piece
-import pac
+from . import piece
+from . import pac
 import random
 
 class State:
-    def __init__(self):
+    def __init__(self, deck):
         self.turn = 0           #bool, 0 for player 1 and 1 for player 2
         
         # initally creating all of the pieces:
@@ -36,65 +36,81 @@ class State:
         # 4 = silly Z
         self.win_condition = 0  
 
-        self.c1 = pac.Card("Make a Square!", "Play this card to change the way to win! Now the only way to win is by making a 3x3 sqaure of pieces.")
-        self.c2 = pac.Card("Make a Triange!", "Play this card to change the way to win! Now the only way to win is by making a triange of pieces.")
-        self.c3 = pac.Card("Obtain All 4 Corners!", "Play this card to change the way to win! Now the only way to win is by marking all four corners with your pieces.")
-        self.c4 = pac.Card("Make a T!", "Play this card to change the way to win! Now the only way to win is by making a T-shape with your pieces (5 across the top, 3 for the base).")
-        self.c5 = pac.Card("Make a Silly Z!", "Play this card to change the way to win! Now the only way to win is by making a silly Z with your pieces.")
-
-        #list of entire card deck
-        self.card_deck = [self.c1, self.c2, self.c3, self.c4, self.c5]
+        self.card_deck = deck
 
         self.draw_rule = 0      #current draw rule (draw one card) 
         #self.move_rule = 0      #current move rule (move to any surrounding square)
 
+    def change_turn(self):
+        if self.turn == 0:
+            self.turn = 1
+        else:
+            self.turn = 0
+
     #checks if a move is legal, returns 0 if illegal and 1 if legal
-    def check_valid_move(self, piece, next_x, next_y):
-        curr_x = piece.x_coord
-        curr_y = piece.y_coord
+    def check_valid_move(self, curr_x, curr_y, next_x, next_y):
+        valid = 1
 
         check_x = 2*next_x - curr_x
         check_y = 2*next_y - curr_y
-
-        empty = 1       #bool to see if the square after a piece is empty
+        
+        empty = 1       #bool to see if the space next to it
+        emtpy_2 = 1
+        getting_yeeted = 0
         for i in self.pieces:
-            if (i.get_x_coord() == check_x) & (i.get_y_coord() == check_y):
+            if (i.get_x_coord() == next_x) & (i.get_y_coord() == next_y):
                 empty = 0
+                getting_yeeted = i
+                break
 
         if empty == 0:
-            print("Illegal move!")
-            return 0
+            empty_2 = 1       #bool to see if the square after a piece is empty
+            for i in self.pieces:
+                if (i.get_x_coord() == check_x) & (i.get_y_coord() == check_y):
+                    empty_2 = 0
+                    break
 
-        elif (next_x == curr_x - 1) & (next_y == curr_y + 1):
-            return 1
-        elif (next_x == curr_x) & (next_y == curr_y + 1):
-            return 1
-        elif (next_x == curr_x + 1) & (next_y == curr_y + 1):
-            return 1
-        elif (next_x == curr_x + 1) & (next_y == curr_y):
-            return 1
-        elif (next_x == curr_x + 1) & (next_y == curr_y - 1):
-            return 1
-        elif (next_x == curr_x) & (next_y == curr_y - 1):
-            return 1
-        elif (next_x == curr_x - 1) & (next_y == curr_y - 1):
-            return 1
-        elif (next_x == curr_x - 1) & (next_y == curr_y):
-            return 1
-        else: 
-            return 0
+            if empty_2 == 0:
+                #print("Illegal move!")
+                valid = 0
+
+        if (empty == 0) & (empty_2 == 1):
+            getting_yeeted.move(check_x, check_y)
+
+        return valid
 
         
     #performs the action on the card!
-    def play_card(self, card):
+    def play_card(self, card, player):
+        match card.id:
+            case 1:
+                self.win_condition = 3
+                #print("case1")
+            case 2:
+                self.win_condition = 4
+                #print("case2")
+            case 3:
+                self.win_condition = 0
+                #print("case3")
+            case 4:
+                self.win_condition = 1
+                #print("case4")
+            case 5:
+                self.win_condition = 2
+                #print("case5")
+            case 6: #wheel, discards whole hand
+                for i in range(0, len(player.get_hand)):
+                    self.draw_card(player)
 
-        return 0
-    
+
+                
+
     def draw_card(self, player):
-        ind = random.randrange(0,len(self.card_deck))
-        card = self.card_deck[ind]
-        self.card_deck.remove[ind]
-        player.hand.append(card)
+        if len(self.card_deck) > 0:
+            ind = random.randrange(0,len(self.card_deck))
+            card = self.card_deck[ind]
+            self.card_deck.remove[ind]
+            player.hand.append(card)
 
     #returns a certain piece given an index in the list
     def get_piece(self, indx):
@@ -102,36 +118,173 @@ class State:
 
     #win condition check functions: 
     def check_square(self, p):
-        return 0
+        win = 0
+        p_color = p.get_color()
+        for i in self.pieces:
+            x = i.get_x_coord()
+            y = i.get_y_coord()
+            ct = 0
+            if ct == 1:
+                break
+            if i.get_color() == p_color:
+                for i in self.pieces:
+                    x1 = i.get_x_coord()
+                    y1 = i.get_y_coord()
+                    if i.get_color != p_color:
+                        win = 0
+                        continue
+                    elif (x1 == x + 1) & (y1 == y):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y + 1):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y + 2):
+                        ct = ct + 1
+                    elif (x1 == x + 1) & (y1 == y+ 2):
+                        ct = ct + 1
+                    elif (x1 == x) & (y1 == y+ 2):
+                        ct = ct + 1
+                    elif (x1 == x ) & (y1 == y + 1):
+                        ct = ct + 1
+
+                    if ct == 7:
+                        win = 1
+                        break
+
+        return win
+
 
     def check_triangle(self, p):
-        return 0
+        win = 0
+        p_color = p.get_color()
+        for i in self.pieces:
+            x = i.get_x_coord()
+            y = i.get_y_coord()
+            ct = 0
+            if ct == 1:
+                break
+            if i.get_color() == p_color:
+                for i in self.pieces:
+                    x1 = i.get_x_coord()
+                    y1 = i.get_y_coord()
+                    if i.get_color != p_color:
+                        win = 0
+                        continue
+                    elif (x1 == x + 1) & (y1 == y):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y):
+                        ct = ct + 1
+                    elif (x1 == x + 3) & (y1 == y):
+                        ct = ct + 1
+                    elif (x1 == x + 4) & (y1 == y ):
+                        ct = ct + 1
+                    elif (x1 == x + 1) & (y1 == y + 1):
+                        ct = ct + 1
+                    elif (x1 == x + 3) & (y1 == y + 1):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y + 2):
+                        ct = ct + 1
+
+                    if ct == 7:
+                        win = 1
+                        break
+        return win
+        
 
     def check_corners(self, p):
-        return 0
+        counter = 0
+        for i in self.pieces:
+            if i.color == p.color:
+                if (i.get_x_coord == 1 and i.get_y_coord == 5) or (i.get_x_coord == 1 and i.get_y_coord == 2) or (i.get_x_coord == 6 and i.get_y_coord == 2) or (i.get_x_coord == 6 and i.get_y_coord == 5):
+                    i += 1
+        if counter == 4:
+            return 1
     
     def check_t(self, p):
-        return 0
+        win = 0
+        p_color = p.get_color()
+        for i in self.pieces:
+            x = i.get_x_coord()
+            y = i.get_y_coord()
+            ct = 0
+            if ct == 1:
+                break
+            if i.get_color() == p_color:
+                for i in self.pieces:
+                    x1 = i.get_x_coord()
+                    y1 = i.get_y_coord()
+                    if i.get_color != p_color:
+                        win = 0
+                        continue
+                    elif (x1 == x + 1) & (y1 == y):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y):
+                        ct = ct + 1
+                    elif (x1 == x + 3) & (y1 == y):
+                        ct = ct + 1
+                    elif (x1 == x + 4) & (y1 == y ):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y - 1):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y - 2):
+                        ct = ct + 1
+
+                    if ct == 6:
+                        win = 1
+                        break
+        return win
 
     def check_z(self, p):
-        return 0
+        win = 0
+        p_color = p.get_color()
+        for i in self.pieces:
+            x = i.get_x_coord()
+            y = i.get_y_coord()
+            ct = 0
+            if ct == 1:
+                break
+            if i.get_color() == p_color:
+                for i in self.pieces:
+                    x1 = i.get_x_coord()
+                    y1 = i.get_y_coord()
+                    if i.get_color != p_color:
+                        win = 0
+                        continue
+                    elif (x1 == x + 1) & (y1 == y):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y + 1):
+                        ct = ct + 1
+                    elif (x1 == x + 2) & (y1 == y + 2):
+                        ct = ct + 1
+                    elif (x1 == x + 3) & (y1 == y + 2):
+                        ct = ct + 1
+                    elif (x1 == x + 3) & (y1 == y + 3):
+                        ct = ct + 1
+
+                    if ct == 6:
+                        win = 1
+                        break
+        return win
 
     #checks to see if a certain player has won 
     def check_win_condition(self, player):
         if self.win_condition == 1:
-            self.check_square(player)
+            return self.check_square(player)
 
         elif self.win_condition == 2:
-            self.check_triangle(player)
+            return self.check_triangle(player)
 
         elif self.win_condition == 3:
-            self.check_corners(player)
+            return self.check_corners(player)
 
         elif self.win_condition == 4:
-            self.check_t(player)
+            return self.check_t(player)
 
         else:
-            self.check_z(player)
+            return self.check_z(player)
 
 
 
