@@ -106,7 +106,6 @@
         height: 50%;
         border: 1px solid black;
         border-radius: 100%;
-        z-index: 2;
       }
 
       .brown {
@@ -189,9 +188,9 @@ function clickCell(e) {
     clickPiece(e.target, last_clicked_piece_x, last_clicked_piece_y);
   } else {
     if (last_clicked_piece != null) {
-      var new_x = parseInt(e.target.id.charAt(1)));
-      var new_y = parseInt(e.target.id.charAt(3))
-      if (Math.abs(new_x - last_clicked_piece_x <= 1 && Math.abs(new_y - last_clicked_piece_y) <= 1) {
+      var new_x = parseInt(e.target.id.charAt(1));
+      var new_y = parseInt(e.target.id.charAt(3));
+      if (Math.abs(new_x - last_clicked_piece_x) <= 1 && Math.abs(new_y - last_clicked_piece_y) <= 1) {
         sendMove(last_clicked_piece_x, last_clicked_piece_y, new_x, new_y);
       }  else {
         unselect();
@@ -199,20 +198,25 @@ function clickCell(e) {
     }
   }
 }
-function sendMove(oldx, oldy, newx, newy) {
-  var response = await fetch({% url 'sendMove' %}, {
-    method: "POST"
-    body: {
-      oldx: oldx,
-      oldy: oldy,
-      newx: newx,
-      newy: newy,
-    }
+async function sendMove(oldx, oldy, newx, newy) {
+  var data = new FormData();
+  data.append("oldx", oldx);
+  data.append("oldy", oldy);
+  data.append("newx", newx);
+  data.append("newy", newy);
+  var response = await fetch("{% url 'sendMove' %}", {
+    method: "POST",
+    headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
+    credential: 'same-origin',
+    body: JSON.stringify({
+      'oldx': parseInt(oldx),
+      'oldy': parseInt(oldy),
+      'newx': newx,
+      'newy': newy,
+      'color': color
+    })
   })
   .then(response => console.log(response));
-  <form action = "{% url 'newGame' %}" method="get">
-    <input type="submit" value="new Game" />
-  </form>
 }
 </script>
 <script>
@@ -235,6 +239,7 @@ function create_tile_id(x, y) {
 </script>
   </head>
   <body>
+    {% csrf_token %}
     <!-- <div>{{games|length}}</div> -->
     <div class="container">
       <div class="title-text">
