@@ -1,5 +1,6 @@
 import piece
 import pac
+import random
 
 class State:
     def __init__(self):
@@ -99,7 +100,14 @@ class State:
         
     #performs the action on the card!
     def play_card(self, card):
+
         return 0
+    
+    def draw_card(self, player):
+        ind = random.randrange(0,len(self.card_deck))
+        card = self.card_deck[ind]
+        self.card_deck.remove[ind]
+        player.hand.append(card)
 
     #returns a certain piece given an index in the list
     def get_piece(self, indx):
