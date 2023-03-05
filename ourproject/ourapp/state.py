@@ -41,6 +41,12 @@ class State:
         self.draw_rule = 0      #current draw rule (draw one card) 
         #self.move_rule = 0      #current move rule (move to any surrounding square)
 
+    def change_turn(self):
+        if self.turn == 0:
+            self.turn = 1
+        else:
+            self.turn = 0
+
     #checks if a move is legal, returns 0 if illegal and 1 if legal
     def check_valid_move(self, piece, next_x, next_y):
         valid = 0
