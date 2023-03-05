@@ -2,19 +2,68 @@
 <html>
   <head>
       <title>
-        Shape Making Game Landing Page
+        Chaos - Log In
       </title>
+      <style>
+      :root {
+        --main-bg: grey;
+        --brown: rgb(147, 83, 53);
+        --beige: rgb(223, 188, 150);
+        --brown-selected: rgb(147, 250, 53);
+        --beige-selected: rgb(223, 250, 150);
+        --win-area-border: rgba(0, 128, 0, 0.5);
+      }
+      html {
+        height: 100vh;
+        width: 100vw;
+      }
+      body {
+        height: 100%;
+        margin: 0;
+        background-color: var(--main-bg);
+      }
+      .container {
+        height: 100%;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      form {
+        height: 100%;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      input {
+        margin-bottom: 15px;
+        height: 65px;
+        font-size: 50px;
+      }
+      label {
+        font-size: 50px;
+      }
+      #sub {
+        border-radius: 15%;
+        padding: 20px 30px;
+        margin: 20px;
+        height: 100px;
+        background-color: var(--beige);
+        border: 2px solid var(--brown);
+      }
+      </style>
   </head>
   <body>
     <form action ="{% url 'log_in'%}" method = "post">
       {% csrf_token %}
-        <lable for="username"> Username: </lable>
-        <input type = "text" id = "username" name = "username"> 
+        <label for="username"> Username: </label>
+        <input type = "text" id = "username" name = "username">
         <br>
-        <lable for="password"> Password: </lable>
-        <input type = "text" id = "password" name = "password">
+        <label for="password"> Password: </label>
+        <input type = "password" id = "password" name = "password">
         <br>
-        <input type="submit" value="Log In">
+        <input id="sub" type="submit" value="Log In">
     </form>
   </body>
 </html>

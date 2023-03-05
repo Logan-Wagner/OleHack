@@ -98,13 +98,13 @@ def profile(request):
     return render(request,'profile.html')
 
 def change_username(request):
-    user.username = request.POST[username]
-    user.save()
+    request.user.username = request.POST['username']
+    request.user.save()
     return render(request, 'index.html')
 
 def change_password(request):
-    user.set_password(request.POST[username])
-    user.save()
+    request.user.set_password(request.POST['password'])
+    request.user.save()
     return render(request, 'index.html')
 
 def log_out(request):
@@ -115,7 +115,7 @@ def log_in(request):
     user = authenticate(username = request.POST['username'], password = request.POST['password'])
     if user == None:
         #redirect to log in error page
-        return(request, 'log_in_error.html')
+        return render(request, 'login_error.html')
     else:
         #log in and go to landing page
         login(request, user)

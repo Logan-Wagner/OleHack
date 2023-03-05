@@ -2,31 +2,82 @@
 <html>
   <head>
       <title>
-        Shape Making Game Landing Page
+        Chaos - Profile
       </title>
+      <style>
+      :root {
+        --main-bg: grey;
+        --brown: rgb(147, 83, 53);
+        --beige: rgb(223, 188, 150);
+        --brown-selected: rgb(147, 250, 53);
+        --beige-selected: rgb(223, 250, 150);
+        --win-area-border: rgba(0, 128, 0, 0.5);
+      }
+      html {
+        height: 100vh;
+        width: 100vw;
+      }
+      body {
+        height: 100%;
+        margin: 0;
+        background-color: var(--main-bg);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 50px;
+      }
+      h1 {
+        font-size: 250px;
+        margin-bottom: 50px;
+      }
+      .sub {
+        background-color: var(--beige);
+        border: 2px solid var(--brown);
+        padding: 20px;
+        border-radius: 20%;
+        margin: 0 20px;
+      }
+      .field {
+        height: 50px;
+      }
+      form {
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      #out {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      input {
+        font-size: 50px;
+      }
+      </style>
   </head>
   <body>
     <div>
-        
     </div>
     <br>
     <form action ="{% url 'change_username' %}" method = "post">
         {% csrf_token %}
-        <lable for="username"> Change Username: </lable>
-        <input type = "text" id = "username" name = "username">
-        <input type = "submit" value="Change Username" >
+        <label for="username"> Change Username: </label>
+        <input class="field" type = "text" id = "username" name = "username">
+        <input class="sub"type = "submit" value="Change Username" >
     </form>
     <br>
     <form action ="{% url 'change_password' %}" method = "post">
         {% csrf_token %}
-        <lable for="password"> Change Password: </lable>
-        <input type = "text" id = "password" name = "password">
-        <input type = "submit" value="Change Password" >
+        <label for="password"> Change Password: </label>
+        <input class="field"type = "password" id = "password" name = "password">
+        <input class="sub"type = "submit" value="Change Password" >
     </form>
     <br>
-    <form action ="{% url 'log_out' %}" method = "get">
+    <form id="out" action ="{% url 'log_out' %}" method = "get">
         {% csrf_token %}
-        <input type = "submit" value="Logout" >
+        <input class="sub"type = "submit" value="Logout" >
     </form>
   </body>
 </html>
