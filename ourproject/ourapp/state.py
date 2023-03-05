@@ -84,15 +84,20 @@ class State:
     def play_card(self, card, player):
         match card.id:
             case 1:
-                print("case1")
+                self.win_condition = 3
+                #print("case1")
             case 2:
-                print("case2")
+                self.win_condition = 4
+                #print("case2")
             case 3:
-                print("case3")
+                self.win_condition = 0
+                #print("case3")
             case 4:
-                print("case4")
+                self.win_condition = 1
+                #print("case4")
             case 5:
-                print("case5")
+                self.win_condition = 2
+                #print("case5")
             case 6: #wheel, discards whole hand
                 for i in range(0, len(player.get_hand)):
                     self.draw_card(player)
