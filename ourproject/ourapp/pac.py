@@ -10,6 +10,9 @@ class Player:
     def get_hand(self, hand):
         return self.hand
 
+    def get_color(self):
+        return self.color
+
 class Cards:
     def __init__(self, t, txt, id):
         self.title = t      #string for the card title
