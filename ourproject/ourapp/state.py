@@ -3,7 +3,7 @@ import pac
 import random
 
 class State:
-    def __init__(self):
+    def __init__(self, deck):
         self.turn = 0           #bool, 0 for player 1 and 1 for player 2
         
         # initally creating all of the pieces:
@@ -36,14 +36,7 @@ class State:
         # 4 = silly Z
         self.win_condition = 0  
 
-        self.c1 = pac.Card("Make a Square!", "Play this card to change the way to win! Now the only way to win is by making a 3x3 sqaure of pieces.")
-        self.c2 = pac.Card("Make a Triange!", "Play this card to change the way to win! Now the only way to win is by making a triange of pieces.")
-        self.c3 = pac.Card("Obtain All 4 Corners!", "Play this card to change the way to win! Now the only way to win is by marking all four corners with your pieces.")
-        self.c4 = pac.Card("Make a T!", "Play this card to change the way to win! Now the only way to win is by making a T-shape with your pieces (5 across the top, 3 for the base).")
-        self.c5 = pac.Card("Make a Silly Z!", "Play this card to change the way to win! Now the only way to win is by making a silly Z with your pieces.")
-
-        #list of entire card deck
-        self.card_deck = [self.c1, self.c2, self.c3, self.c4, self.c5]
+        self.card_deck = deck
 
         self.draw_rule = 0      #current draw rule (draw one card) 
         #self.move_rule = 0      #current move rule (move to any surrounding square)
@@ -86,15 +79,31 @@ class State:
 
         
     #performs the action on the card!
-    def play_card(self, card):
+    def play_card(self, card, player):
+        match card.id:
+            case 1:
+                print("case1")
+            case 2:
+                print("case2")
+            case 3:
+                print("case3")
+            case 4:
+                print("case4")
+            case 5:
+                print("case5")
+            case 6: #wheel, discards whole hand
+                for i in range(0, len(player.get_hand)):
+                    self.draw_card(player)
 
-        return 0
-    
+
+                
+
     def draw_card(self, player):
-        ind = random.randrange(0,len(self.card_deck))
-        card = self.card_deck[ind]
-        self.card_deck.remove[ind]
-        player.hand.append(card)
+        if len(self.card_deck) > 0:
+            ind = random.randrange(0,len(self.card_deck))
+            card = self.card_deck[ind]
+            self.card_deck.remove[ind]
+            player.hand.append(card)
 
     #returns a certain piece given an index in the list
     def get_piece(self, indx):
@@ -108,7 +117,13 @@ class State:
         return 0
 
     def check_corners(self, p):
-        return 0
+        counter = 0
+        for i in self.pieces:
+            if i.color == p.color:
+                if (i.get_x_coord == 1 and i.get_y_coord == 5) or (i.get_x_coord == 1 and i.get_y_coord == 2) or (i.get_x_coord == 6 and i.get_y_coord == 2) or (i.get_x_coord == 6 and i.get_y_coord == 5):
+                    i += 1
+        if counter == 4:
+            return 1
     
     def check_t(self, p):
         return 0
