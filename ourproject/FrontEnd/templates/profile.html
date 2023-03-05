@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>
+        Shape Making Game Landing Page
+      </title>
+  </head>
+  <body>
+    <div>
+        
+    </div>
+    <br>
+    <form action ="{% url 'change_username' %}" method = "post">
+        {% csrf_token %}
+        <lable for="username"> Change Username: </lable>
+        <input type = "text" id = "username" name = "username">
+        <input type = "submit" value="Change Username" >
+    </form>
+    <br>
+    <form action ="{% url 'change_password' %}" method = "post">
+        {% csrf_token %}
+        <lable for="password"> Change Password: </lable>
+        <input type = "text" id = "password" name = "password">
+        <input type = "submit" value="Change Password" >
+    </form>
+    <br>
+    <form action ="{% url 'log_out' %}" method = "get">
+        {% csrf_token %}
+        <input type = "submit" value="Logout" >
+    </form>
+  </body>
+</html>

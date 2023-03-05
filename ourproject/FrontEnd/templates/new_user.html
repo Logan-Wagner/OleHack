@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>
+        Shape Making Game New User
+      </title>
+  </head>
+  <body>
+    <form action ="{% url 'create_user' %}" method = "post">
+        {% csrf_token %}
+        <lable for="fname"> First name: </lable>
+        <lable for="lname"> Last name: </lable>
+        <lable for="email"> Email: </lable>
+        <lable for="username"> Username: </lable>
+        <lable for="password"> Password: </lable>
+        <input type="text" id = "fname" name = "first_name"> <br>
+        <input type = "text" id = "lname" name = "last_name"> <br>
+        <input type = "text" id = "email" name = "email"> <br>
+        <input type = "text" id = "username" name = "username"> <br>
+        <input type = "text" id = "password" name = "password">
+        <input type = "submit" value="create_user" >
+    </form>
+  </body>

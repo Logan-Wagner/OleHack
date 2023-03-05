@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>
+        Shape Making Game Landing Page
+      </title>
+  </head>
+  <body>
+    <form action ="{% url 'log_in'%}" method = "post">
+      {% csrf_token %}
+        <lable for="username"> Username: </lable>
+        <input type = "text" id = "username" name = "username"> 
+        <br>
+        <lable for="password"> Password: </lable>
+        <input type = "text" id = "password" name = "password">
+        <br>
+        <input type="submit" value="Log In">
+    </form>
+  </body>
+</html>
